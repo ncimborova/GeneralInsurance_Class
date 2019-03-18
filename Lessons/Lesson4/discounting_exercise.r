@@ -31,7 +31,8 @@ plot(GenIns, lattice=TRUE)
 #YOUR SOLUTION
 #--------
 
-
+chainladder(GenIns)
+predict(chainladder(GenIns))
 
 #--------
 
@@ -50,24 +51,77 @@ plot(GenIns, lattice=TRUE)
 
 ## STEP1: Take paid data for House business and Small claim size
 # Paid_HH_sml <- dt_PaidCase %>% filter(...) 
-
+Paid_HH_sml <- dt_PaidCase %>% filter(Business == "House" & ClaimSize == "Small" & dataset_type == "PAID")
 
 ## STEP2: Now convert the standard table into a triangle
 # %>% as.triangle(...)
 
+triangle_sml <- Paid_HH_sml %>% as.triangle(Paid_HH_sml, origin = "ay", dev = "dy", value = "SumOfamount")
+View(triangle_sml)  # tabulka
+head(triangle_sml)  # matica
+                    # dTriang <- triangle( ... ) 
+                    # tento príkaz nepotrebujem, keďže v matici mám zoradené stĺpce od 1 po 10 tak ako to má byť
 
 ## STEP3: Now start plotting things to see more information
+plot(triangle_sml)
 
+plot(predict(chainladder(triangle_sml)))
 
 ## STEP4: And get the aging factors and some other stat's out to see more details
 # Hint: ata(...)
-
+ata(triangle_sml)
 
 ## Now repeat for all types of buiness and sizes of claims. Compare the findings...
+
+# všade ostáva typ PAID, takže sú dalsie 3 kombinácie dát, a pri žiadnej sa mi neprehodili stlpce, takze nikde 
+# som nemusela použit už hore spomenutý príkaz nato určený.
+Paid_HH_lrg <- dt_PaidCase %>% filter(Business == "House" & ClaimSize == "Large" & dataset_type == "PAID")
+triangle_lrg <- Paid_HH_lrg %>% as.triangle(Paid_HH_lrg, origin = "ay", dev = "dy", value = "SumOfamount")
+head(triangle_lrg)
+plot(triangle_lrg)
+plot(predict(chainladder(triangle_lrg)))
+ata(triangle_lrg)
+
+Paid_3P_sml <- dt_PaidCase %>% filter(Business == "3rd Party" & ClaimSize == "Small" & dataset_type == "PAID")
+triangle_sml_2 <- Paid_3P_sml %>% as.triangle(Paid_3P_sml, origin = "ay", dev = "dy", value = "SumOfamount")
+head(triangle_sml_2)
+plot(triangle_sml_2)
+plot(predict(chainladder(triangle_sml_2)))
+ata(triangle_sml_2)
+
+Paid_3P_lrg <- dt_PaidCase %>% filter(Business == "3rd Party" & ClaimSize == "Large" & dataset_type == "PAID")
+triangle_lrg_2 <- Paid_3P_lrg %>% as.triangle(Paid_3P_lrg, origin = "ay", dev = "dy", value = "SumOfamount")
+head(triangle_lrg_2)
+plot(triangle_lrg_2)
+plot(predict(chainladder(triangle_lrg_2)))
+ata(triangle_lrg_2)
+
 
 
 ## If you are now comforatble with what this does, try doing the same, but using additional information: The Case data!
 ## Hint: Sum Paid and Case together to come up with the final claims estimates (the Incurred claims)
+
+# tu su zosumovane Paid a Case 
+Paid_HH_lrg <- dt_PaidCase %>% filter(Business == "House" & ClaimSize == "Large")
+triangle_lrg <- Paid_HH_lrg %>% as.triangle(Paid_HH_lrg, origin = "ay", dev = "dy", value = "SumOfamount")
+head(triangle_lrg)
+plot(triangle_lrg)
+plot(predict(chainladder(triangle_lrg)))
+ata(triangle_lrg)
+
+Paid_3P_sml <- dt_PaidCase %>% filter(Business == "3rd Party" & ClaimSize == "Small")
+triangle_sml_2 <- Paid_3P_sml %>% as.triangle(Paid_3P_sml, origin = "ay", dev = "dy", value = "SumOfamount")
+head(triangle_sml_2)
+plot(triangle_sml_2)
+plot(predict(chainladder(triangle_sml_2)))
+ata(triangle_sml_2)
+
+Paid_3P_lrg <- dt_PaidCase %>% filter(Business == "3rd Party" & ClaimSize == "Large")
+triangle_lrg_2 <- Paid_3P_lrg %>% as.triangle(Paid_3P_lrg, origin = "ay", dev = "dy", value = "SumOfamount")
+head(triangle_lrg_2)
+plot(triangle_lrg_2)
+plot(predict(chainladder(triangle_lrg_2)))
+ata(triangle_lrg_2)
 
 
 #--------
@@ -77,6 +131,11 @@ plot(GenIns, lattice=TRUE)
 ## There are a couple of different types of business in the data from previous lesson. 
 ## What do you think, how long are the average delays in payments? Set up a table, that will 
 ## show your assumptions and commit it to your git repository.
+
+# KOMENTARE
+# v large za 1 rok vyrazne menej rastie graf ako v small aj pri House aj pri 3rd Party
+# najrovnejsie ciary, teda najkratši chvost je v pripade dat pre House+Large, tam sa to moc nemenilo 
+# celkovo mi tie grafy neprídu veľmi odlišné, akoby som čakala
 
 ########################################
 ## Exercise 4
